@@ -1,0 +1,7 @@
+<form method="POST" action="/audio/upload/" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.errors }}
+    <label for="audio_file">오디오 파일 선택: </label>
+    <input type="file" id="audio_file" name="audio_file" accept="audio/wav">
+    <input type="submit" value="업로드" />
+</form>

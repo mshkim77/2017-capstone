@@ -20,9 +20,11 @@ lib64/
 parts/
 sdist/
 var/
+uploads/
 *.egg-info/
 .installed.cfg
 *.egg
+migrations/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -87,3 +89,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea/
