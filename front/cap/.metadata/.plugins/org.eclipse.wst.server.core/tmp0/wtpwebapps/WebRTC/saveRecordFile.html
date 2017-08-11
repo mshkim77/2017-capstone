@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+</head>
+<body>
+	<a id="download">Download</a>
+	<button id="stop">Stop</button>
+	<script> 
+	  let shouldStop = false;
+	  let stopped = false;
+	  const downloadLink = document.getElementById("download");
+	  const stopButton = document.getElementById("stop");
+	
+	  stopButton.addEventListener("click", function() {
+    	  console.log("click stop");
+	    shouldStop = true;
+	  })
+	
+	  var handleSuccess = function(stream) {  
+	    const options = {
+	    		mimeType: "video/webm;codecs=vp9"
+	    		//audio/webm
+	    		};
+	    const recordedChunks = [];
+	    const mediaRecorder = new MediaRecorder(stream, options);  
+	
+	    mediaRecorder.addEventListener("dataavailable", function(e) {
+	    	console.log("dataavailable");
+	      if (e.data.size > 0) {
+	        recordedChunks.push(e.data);
+	      }
+	
+	      if(shouldStop == true && stopped == false) {
+	    	  
+	    	  console.log("onStop");
+	        mediaRecorder.stop();
+	        stopped = true;
+	      }
+	    });
+	
+	    mediaRecorder.addEventListener("stop", function() {
+	    	
+	      downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+	      downloadLink.download = "acetest.wav";
+	    });
+	
+	    mediaRecorder.start();
+	  };
+	
+	  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+	      .then(handleSuccess);
+	
+	</script>
+</body>
+</html>
