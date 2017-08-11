@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.microphone.min.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="./css/HTML_reset_css.css"/>
+	<style type="text/css">
+	
+		body {
+			text-align : center;
+		}
+		
+		.viewDiv {
+			display : table;
+	    	position : absolute;
+	    	height : 100%;
+	    	width : 100%;
+		}
+		
+		.verticalDiv {
+			display : table-cell;
+	    	vertical-align : middle;
+	    	background-color : #203E49;	
+		}
+		
+		.horizontalDiv {
+			margin-left : auto;
+	    	margin-right : auto;
+	    	width : 100%;
+	    	text-align : center;
+	    	padding : 1.5em 0em;
+    	}
+	
+		#waveform {
+			width : 50%;
+			margin : 5em auto;
+			/* border : 1px solid black;
+			border-left-style: hidden; */
+		}
+		
+	
+		#player {
+			display: none;
+		}
+		
+		
+		#play, #send {
+			width : 4em;
+	    	height : 4em;
+	    	margin : 1em;
+		}
+		
+		#btn {
+			width : 4em;
+	    	height : 4em;
+	    	margin : 1em;
+		}
+		
+		.test {
+	    	position : relative;
+	    	top : 115px;
+			background-color : #ffffff;
+			opacity: 0.8;
+			width : 100%;
+			height : 50px;
+			margin : 0px;
+			padding : 0px;
+			
+		}
+		
+		
+	</style>
+</head>
+<body>
+	<div class="viewDiv">
+		<div class="verticalDiv">
+			<div class="horizontalDiv">
+				<div id="waveform">
+					<div class="test"></div>
+				</div>
+				<br>
+				<audio id="player" controls></audio>
+				<!-- <button id="down">download</button> -->
+				<br>
+				<!-- <button id="play">play</button> -->
+				<img id="play" src="./img/play0.png">
+				
+				<!-- <button id="btn">Rec</button> -->
+				<img id="btn" src="./img/start.png">
+				
+			    <!-- <button id="send">send</button> -->
+				<img id="send" src="./img/done0.png">
+			</div>
+		</div>
+	</div>
+	
+	<script>  
+		
+		//sound wave
+		var wavesurfer = WaveSurfer.create({ container: '#waveform'
+											, waveColor: 'white'
+											, progressColor: '#203E49'//#000000, #638DA6
+											, barWidth: 8
+											, cursorColor: "#203E49"
+											});
+
+		var voiceWave = Object.create(WaveSurfer.Microphone);
+		
+		voiceWave.init({
+		    wavesurfer: wavesurfer
+		});
+
+		voiceWave.on('deviceReady', function(stream) {
+		    console.log('Device ready!', stream);
+		});
+		voiceWave.on('deviceError', function(code) {
+		    console.warn('Device error: ' + code);
+		});
+		//-------
+		
+	 	var player = document.getElementById('player');
+		var downBtn = document.getElementById("down");
+
+		var playBtn = document.getElementById("play");
+		var btn = document.getElementById("btn");
+		var sendBtn = document.getElementById("send");
+		
+	    var mediaRecorder;
+	    var recordedBlobs;
+	    
+	    var isRec = false;
+	    var isPlay = false;
+	    
+	    playBtn.onclick = null;
+	    //playBtn.disabled = true;
+	    
+	    //downBtn.onclick = download;
+	    //downBtn.disabled = true;
+
+
+	    btn.onclick = toggleRecording;
+	    
+	    sendBtn.onclick = null;
+	    //sendBtn.disabled = true;
+	    
+	  	var handleSuccess = function(stream) {
+		  
+			window.stream = stream;
+		  
+		    if (window.URL) {
+		    	player.src = window.URL.createObjectURL(stream);
+		    } else {
+		    	player.src = stream;
+		    }
+	  	};
+	  
+	  	function handleError(error) {
+	  		
+			console.log('navigator.getUserMedia error: ', error);
+		}
+	
+	  	navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+	      .then(handleSuccess).catch(handleError);
+	      
+
+	  	function handleDataAvailable(event) {
+	  		
+	    	if (event.data && event.data.size > 0) {
+	      		recordedBlobs.push(event.data);
+	    	}
+	  	}
+	  
+	  	function handleStop(event) {
+	  		
+	    	console.log('Recorder stopped: ', event);
+	  	}
+	  
+	  	function toggleRecording() {
+	  		
+		 	if (isRec) {
+		 		
+			    stopRecording();
+			    voiceWave.pause();
+			    voiceWave.stop();
+
+			    playBtn.onclick = togglePlay;
+			    playBtn.src = "./img/play1.png";
+				
+			    //downBtn.onclick = nothing;
+			    
+			    sendBtn.onclick = sendFile;
+			    sendBtn.src = "./img/done1.png";
+			    //btn.textContent = 'Rec';
+
+			    isRec = false;
+		    
+			} else {
+			  
+			    startRecording();
+			    voiceWave.start();
+			    playBtn.onclick = null;
+			    playBtn.src = "./img/play0.png";
+				
+			    //downBtn.disabled = true;
+			    
+	    		sendBtn.onclick = null;
+			    sendBtn.src = "./img/done0.png";
+			    
+			    isRec = true;
+			  
+		    
+		  	}
+		}
+	  
+	    function startRecording() {
+	    	
+	    	recordedBlobs = [];
+			  
+			var options = {mimeType: 'audio/webm'};
+			  
+			try {
+				mediaRecorder = new MediaRecorder(window.stream, options); 
+			} catch (e) {
+				alert("ERROR : " + e);
+				return;
+			}
+			  
+			  
+			//btn.textContent = "stop";
+			btn.src = "./img/stop.png";
+			mediaRecorder.onstop = handleStop;
+			mediaRecorder.ondataavailable = handleDataAvailable;
+			mediaRecorder.start(10); // collect 10ms of data
+			console.log('MediaRecorder started', mediaRecorder);
+	    }
+	    
+	    function stopRecording() {
+	    	
+	    	mediaRecorder.stop();
+			btn.src = "./img/start.png";
+	    	
+	    	console.log('Recorded Blobs: ', recordedBlobs);
+	    }
+	    
+
+	    function togglePlay() {
+	    	
+			if (isPlay) {
+				isPlay = false;
+				playPause();
+				console.log("play pause");
+
+			    //downBtn.disabled = true;
+			    
+	    		sendBtn.onclick = sendFile;
+			    sendBtn.src = "./img/done1.png";
+				
+			} else {
+				
+				//btn control
+				
+	    		sendBtn.onclick = null;
+			    sendBtn.src = "./img/done0.png";
+			    //btn.textContent = 'Rec';
+			    
+				play();
+				console.log("play start");
+			}
+		}
+	    
+	    player.addEventListener("ended", function(){
+	    	player.currentTime = 0;
+    	    console.log("play end");
+			isPlay = true;
+			togglePlay();
+    	}); 
+	    
+	    function play() {
+	    	
+	    	var superBuffer = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	player.src = window.URL.createObjectURL(superBuffer);
+	    	playBtn.src = "./img/pause1.png";
+			isPlay = true;
+	    	player.play();
+	    }
+	    
+	    function playPause() {
+			playBtn.src = "./img/play1.png";
+	    	player.pause();
+	    }
+	   
+	    function download() {
+	    	
+	    	var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	var url = window.URL.createObjectURL(blob);
+	    	var a = document.createElement('a');
+	    	
+	    	a.style.display = 'none';
+	    	a.href = url;
+	    	a.download = 'test.wav';
+	    	document.body.appendChild(a);
+	    	a.click();
+	    	setTimeout(function() {
+	    		//document.body.removeChild(a);
+	    	    window.URL.revokeObjectURL(url);
+	    	}, 100);
+	    } 
+	    
+	    function sendFile() {
+	    	
+	    	var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	var url = window.URL.createObjectURL(blob);
+	    	/* var fileSend = document.getElementById('sendItem');
+	    	var gon = document.getElementById('gon');
+	    	
+	    	var temp = document.gon.sendItem.file; */
+
+	    	//console.log("" + temp.value + "");
+	    	
+	    	//var reader = new FileReader();
+	    	//reader.readAsBinaryString(blob);
+	    	
+	    	
+	    	//temp.src = url;
+	    	//gon.submit();
+	    	
+	    	var fd = new FormData();
+			fd.append("fname", "test.wav");
+			fd.append("data", blob);
+			$.ajax({
+			    type: "POST",
+			    url: "downloadFile.jsp",
+			    data: fd,
+			    processData: false,
+			    contentType: false
+			}).done(function(data) {
+			       console.log(data);
+			});
+	    	
+	    	
+	    	
+	    	//fileSend.style.display = 'none';
+	    	//fileSend.src = url;
+	    	//fileSend.download = 'test.wav';
+	    	//document.body.appendChild(a);
+	    	//a.click();
+	    	//setTimeout(function() {
+	    	//	document.body.removeChild(a);
+	    	//	window.URL.revokeObjectURL(url);
+	    	//}, 100);
+	    }
+	    
+
+	</script>
+
+</body>
+</html>
