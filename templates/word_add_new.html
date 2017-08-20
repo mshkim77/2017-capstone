@@ -1,0 +1,32 @@
+<form method="POST" action="/word/new/">
+    {% csrf_token %}
+    {{ form.errors }}
+    <label for="word">단어 입력: </label>
+    <input type="text" id="word" name="word">
+
+    <label for="rage">분노: </label>
+    <input type="number" min="0" max="1" step="0.01" id="rage" name="rage">
+
+    <label for="loathing">혐오: </label>
+    <input type="number" min="0" max="1" step="0.01" id="loathing" name="loathing">
+
+    <label for="grief">슬픔: </label>
+    <input type="number" min="0" max="1" step="0.01" id="grief" name="grief">
+
+    <label for="amazement">놀람: </label>
+    <input type="number" min="0" max="1" step="0.01" id="amazement" name="amazement">
+
+    <label for="terror">공포: </label>
+    <input type="number" min="0" max="1" step="0.01" id="terror" name="terror">
+
+    <label for="admiration">감탄: </label>
+    <input type="number" min="0" max="1" step="0.01" id="admiration" name="admiration">
+
+    <label for="ecstasy">기쁨: </label>
+    <input type="number" min="0" max="1" step="0.01" id="ecstasy" name="ecstasy">
+
+    <label for="vigilance">경계: </label>
+    <input type="number" min="0" max="1" step="0.01" id="vigilance" name="vigilance">
+
+    <input type="submit" value="추가" />
+</form>

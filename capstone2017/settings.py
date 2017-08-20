@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'audioManager',
-    'speechToText',
+    'wordManager',
+    'sentenceManager',
 ]
 
 MIDDLEWARE = [
@@ -131,4 +132,20 @@ STATICFILES_DIRS =  [os.path.join(BASE_DIR, "static")]
 # 미디어 파일 관련
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+# 구글 STT 관련 토큰
+GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""
+{
+  "type": "service_account",
+  "project_id": "pknu-ce-2017-capstone",
+  "private_key_id": "88f2bcc30b934241325297316177f22f76264f46",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCiVZur7XD+ggHN\n8Xf/Gm9rcvAqRtvDWdDjaBG7JeOcV8P6761u/CbH6J4+osIvsYFj9u2afvqt8Fmu\nVxPIZYgB2xs6rJXFoH/DV+Ji11M41WlQqXiO0xXeCgPwjwUYpi3ehO69hyd6fVkD\nVPnCSK9v3YKTme0LjnEe8uujI+lAenpiSxDoCumbwJxX1NSryVSHNa7CkN6swbke\nfzC+fvWU9nk4VGCvPi0tsE33Ih5fLgatompxey4lqmd+Mh5cSv/V3V+xIXEWwb4w\ncgS1bdqxGWKGSppjeRHsrgC3SApCIKAPWTcfZQkn0Ae5C9UxyRsjW/fNPGV/oOAE\nESGnfbGPAgMBAAECggEAZGFFcqnPfkFL9loDVoa1MR8QrUPFruWCCqyWkkAan9mR\ngUDl4MQhAuqvt5GTPESp+vN891Tfk+EUw35q6DcIRAWFr+F6d4sIlfVpMq9tca5d\nghhZSQ/z7KoKx5zYjOZtZLSUoDPL0K1j9nB8RIwHl8fEb5r1/nhlMLsLxIR3PnvA\n9QSCQHmGE9IsBgD4/CwhDpo8ndJlVkNFRq50UkaeRTTD+qI36rjC05MuVpAdxAqZ\nIWfaM61HpeWpbC5kgYV5VPg+YRH+/pAsfhXiFutSkKJVda2+CifHrn/oJVopjkwA\nONuZFbTE1ROxIR7ITJsajyfDPvFpE4mvS2/bYocHWQKBgQDc8wC1w8L2gy+a+u4q\nCAaj4UXhmVj/QJJuui5lZxZ+XUjlp3jjL8X82AkiMAucJ9RV7wS0rAoUIC8HzMNe\n/igdkkOLBJs/UP/+CFHiXglFncCfE4bol7WD0dnE/2fkwYokgwCaPOjGwPkFZuCl\ndRR1HwEaPDyd9rxyeZnZ0MBaawKBgQC8FjD45gI0mH4BJ0ACW5zBJNBHGw/DuW0e\nbNumc4t1ez0zWQaU+PyuEVpEb1WaBjnzyBEH7Y7/lVHwIMQhmvUSwFDHGlNQ8Zvn\nkuAo7mzxboJfoCbEZoInwogIUIHSAAgUXAciqOZVIGUMKGnOHEL/KYDy3Ph6DLZl\ndech0fYWbQKBgQC6z47zH+BQsxxmCfGiggSzPP3rv886iesFSc9+lwmyr8a5vb59\nP+BDZplaWYsHbbmfKqcs5yTiXU/GZX9uaq+aSRdoi+2DPEYlD/3DykRGoxnApi7z\nq4miOaTJZjT+ehEFy+mPfx5FJdWmlpQr8PDqEdvJxdJusLYmh9/oBRMNnwKBgG0Q\nKSGKrii1bAtbKSC04raUlDlHFeMWeJG16cAhK/LZnWlS7CAiKNL+uOsJ7Ac+KQiV\nMFr6g3rsqPCm71PVONrArZZmS32aPB8R6e2SI5Xz0KGGijREhKBtitfXZw/QeN7l\nZjXQ3o7qE+3y2Tds5+RxupYZT/PlvzYiIf5Yc2wZAoGARwDd2zJPTtm5IrgcdjNv\nrkmkdtCx/YBTs6N0fjKtO+jOniBp2wE0fHmisn4l/PlT7nK79HuuZobfR5diU2sF\nGa+2mUe1jZMZ39kPXybc6VgggZCn6qn5HavMjEBYHG+f05kVueUi7nQNFO8rmYLM\nnjr9jmbQEc/U/an7Nknqk3A=\n-----END PRIVATE KEY-----\n",
+  "client_email": "test-stt-account@pknu-ce-2017-capstone.iam.gserviceaccount.com",
+  "client_id": "110171933328479752232",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-stt-account%40pknu-ce-2017-capstone.iam.gserviceaccount.com"
+}
+"""
 
