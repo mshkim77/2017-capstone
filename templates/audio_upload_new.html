@@ -1,7 +1,388 @@
-<form method="POST" action="/audio/new/" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.errors }}
-    <label for="audio_file">오디오 파일 선택: </label>
-    <input type="file" id="audio_file" name="audio_file" accept="audio/wav">
-    <input type="submit" value="업로드" />
-</form>
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.microphone.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="./css/HTML_reset_css.css"/>
+	<style type="text/css">
+
+		body {
+			text-align : center;
+		}
+
+		.viewDiv {
+			display : table;
+	    	position : absolute;
+	    	height : 100%;
+	    	width : 100%;
+		}
+
+		.verticalDiv {
+			display : table-cell;
+	    	vertical-align : middle;
+	    	background-color : #2A3341;
+		}
+
+		.horizontalDiv {
+			margin-left : auto;
+	    	margin-right : auto;
+	    	width : 100%;
+	    	text-align : center;
+	    	padding : 1.5em 0em;
+    	}
+
+		#waveform {
+			width : 50%;
+			height : 100px;
+			margin : 3em auto;
+		}
+
+		.reflected {
+	    	position : relative;
+	    	top : 128px;
+			background-color : #2A3341;
+			opacity: 0.8;
+			width : 100%;
+			height : 64px;
+			z-index : 100;
+
+		}
+
+		#player {
+			display: none;
+		}
+
+
+		.btnDiv {
+			margin-top : 5em;
+		}
+
+		#play, #send {
+			width : 4em;
+	    	height : 4em;
+	    	margin : 1em;
+			vertical-align : middle;
+		}
+
+		#play:active, #send:active {
+			filter: blur(1px);
+			-webkit-filter: blur(1px);
+			-moz-filter: blur(1px);
+			-o-filter: blur(1px);
+		}
+
+		#btn {
+			width : 5em;
+	    	height : 5em;
+	    	margin : 1em;
+			vertical-align : middle;
+		}
+
+		#btn:active {
+			filter: blur(1px);
+			-webkit-filter: blur(1px);
+			-moz-filter: blur(1px);
+			-o-filter: blur(1px);
+		}
+
+
+	</style>
+</head>
+<body>
+	<div class="viewDiv">
+		<div class="verticalDiv">
+			<div class="horizontalDiv">
+				<div id="waveform">
+					<div class="reflected"></div>
+				</div>
+				<br>
+				<audio id="player" controls></audio>
+				<!-- <button id="down">download</button> -->
+				<br>
+				<div class="btnDiv">
+					<img id="play" src="{% static "img/play0.png" %}">
+
+					<img id="btn" src="{% static "img/start.png" %}">
+
+					<img id="send" src="{% static "img/done0.png" %}">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+
+		//sound wave
+		var wavesurfer = WaveSurfer.create({ container: '#waveform'
+											, waveColor: 'white'
+											, progressColor: '#203E49'//#000000, #638DA6
+											, barWidth: 8
+											, cursorColor: "#203E49"
+											});
+
+		var voiceWave = Object.create(WaveSurfer.Microphone);
+
+		voiceWave.init({
+		    wavesurfer: wavesurfer
+		});
+
+		voiceWave.on('deviceReady', function(stream) {
+		    console.log('Device ready!', stream);
+		});
+		voiceWave.on('deviceError', function(code) {
+		    console.warn('Device error: ' + code);
+		});
+		//-------
+
+	 	var player = document.getElementById('player');
+		var downBtn = document.getElementById("down");
+
+		var playBtn = document.getElementById("play");
+		var btn = document.getElementById("btn");
+		var sendBtn = document.getElementById("send");
+
+	    var mediaRecorder;
+	    var recordedBlobs;
+
+	    var isRec = false;
+	    var isPlay = false;
+
+		//timer
+		var strSecs = 0;
+		var isTimer = false;
+
+	    playBtn.onclick = null;
+
+	    //downBtn.onclick = download;
+	    //downBtn.disabled = true;
+
+
+	    btn.onclick = toggleRecording;
+
+	    sendBtn.onclick = null;
+
+	  	var handleSuccess = function(stream) {
+
+			window.stream = stream;
+
+		    if (window.URL) {
+		    	player.src = window.URL.createObjectURL(stream);
+		    } else {
+		    	player.src = stream;
+		    }
+	  	};
+
+	  	function handleError(error) {
+
+			console.log('navigator.getUserMedia error: ', error);
+		}
+
+	  	navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+	      .then(handleSuccess).catch(handleError);
+
+
+	  	function handleDataAvailable(event) {
+
+	    	if (event.data && event.data.size > 0) {
+	      		recordedBlobs.push(event.data);
+	    	}
+	  	}
+
+	  	function handleStop(event) {
+
+	    	console.log('Recorder stopped: ', event);
+	  	}
+
+	  	function toggleRecording() {
+
+		 	if (isRec) {
+
+			    stopRecording();
+			    voiceWave.pause();
+			    voiceWave.stop();
+
+			    playBtn.onclick = togglePlay;
+			    playBtn.src = "{% static "/img/play1.png" %}";
+
+			    //downBtn.onclick = false;
+
+			    sendBtn.onclick = sendFile;
+			    sendBtn.src = "{% static "/img/done1.png" %}";
+
+			    isRec = false;
+			    isTimer = false;
+			    strSecs = 31;
+
+			} else {
+
+			    startRecording();
+			    voiceWave.start();
+
+			    strSecs = 0;
+			    isTimer = true;
+			    timeCheck();
+
+			    playBtn.onclick = null;
+			    playBtn.src = "{% static "/img/play0.png" %}";
+
+			    //downBtn.disabled = true;
+
+	    		sendBtn.onclick = null;
+			    sendBtn.src = "{% static "/img/done0.png" %}";
+
+			    isRec = true;
+
+
+		  	}
+		}
+
+	    function startRecording() {
+
+	    	recordedBlobs = [];
+
+			var options = {mimeType: 'audio/webm'};
+
+			try {
+				mediaRecorder = new MediaRecorder(window.stream, options);
+			} catch (e) {
+				alert("ERROR : " + e);
+				return;
+			}
+
+			btn.src = "{% static "/img/stop.png" %}";
+			mediaRecorder.onstop = handleStop;
+			mediaRecorder.ondataavailable = handleDataAvailable;
+			mediaRecorder.start(10); // collect 10ms of data
+			console.log('MediaRecorder started', mediaRecorder);
+	    }
+
+	    function stopRecording() {
+
+	    	mediaRecorder.stop();
+			btn.src = "{% static "/img/start.png" %}";
+
+	    	console.log('Recorded Blobs: ', recordedBlobs);
+	    }
+
+
+	    function togglePlay() {
+
+			if (isPlay) {
+				isPlay = false;
+				playPause();
+				console.log("play pause");
+
+			    //downBtn.disabled = true;
+
+	    		sendBtn.onclick = sendFile;
+			    sendBtn.src = "{% static "/img/done1.png" %}";
+
+			} else {
+
+	    		sendBtn.onclick = null;
+			    sendBtn.src = "{% static "/img/done0.png" %}";
+
+				play();
+				console.log("play start");
+			}
+		}
+
+	    player.addEventListener("ended", function(){
+	    	player.currentTime = 0;
+    	    console.log("play end");
+			isPlay = true;
+			togglePlay();
+    	});
+
+	    function play() {
+
+	    	var superBuffer = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	player.src = window.URL.createObjectURL(superBuffer);
+	    	playBtn.src = "{% static "/img/pause1.png" %}";
+			isPlay = true;
+	    	player.play();
+	    }
+
+	    function playPause() {
+			playBtn.src = "{% static "/img/play1.png" %}";
+	    	player.pause();
+	    }
+
+	    function download() {
+
+	    	var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	var url = window.URL.createObjectURL(blob);
+	    	var a = document.createElement('a');
+
+	    	a.style.display = 'none';
+	    	a.href = url;
+	    	a.download = 'test.wav';
+	    	document.body.appendChild(a);
+	    	a.click();
+	    	setTimeout(function() {
+	    		document.body.removeChild(a);
+	    	    window.URL.revokeObjectURL(url);
+	    	}, 100);
+	    }
+
+	    function sendFile() {
+            console.log("전송!");
+
+	    	var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
+	    	var url = window.URL.createObjectURL(blob);
+	    	var fd = new FormData();
+
+			fd.append("audio_file", blob, "upload.webm");
+
+			$.ajax({
+                type: "POST",
+			    enctype: "multipart/form-data",
+			    url: "/audio/new/",
+			    data: fd,
+			    processData: false,
+			    contentType: false,
+                success: function () {
+                    console.log("Suss");
+                },
+                error: function () {
+                    console.log("Err");
+                }
+			}).done(function(data) {
+			       console.log(data);
+			});
+	    }
+
+	   function timeCheck() {
+
+		   if(isTimer) {
+			   if(strSecs >= 30) {
+				   toggleRecording();
+			   } else {
+				   strSecs++;
+				   console.log(strSecs);
+				   setTimeout("timeCheck()", 1000);
+			   }
+		   }
+	   }
+
+
+	</script>
+
+</body>
+</html>
+
+{#<form method="POST" action="/audio/new/" enctype="multipart/form-data">#}
+{#    {% csrf_token %}#}
+{#    {{ form.errors }}#}
+{#    <label for="audio_file">오디오 파일 선택: </label>#}
+{#    <input type="file" id="audio_file" name="audio_file" accept="audio/wav">#}
+{#    <input type="submit" value="업로드" />#}
+{#</form>#}

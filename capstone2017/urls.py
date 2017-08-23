@@ -21,5 +21,4 @@ urlpatterns = [
     url(r'^audio/', include('audioManager.urls')),
     url(r'^word/', include('wordManager.urls')),
     url(r'^sentence/', include('sentenceManager.urls')),
-
 ]
