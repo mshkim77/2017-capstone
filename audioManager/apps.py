@@ -1,41 +1,31 @@
 from django.apps import AppConfig
-from .models import AudioFile, AudioFeature
-import librosa, pickle
-import numpy as np
-
+from .models import AudioFile
+from pydub import AudioSegment
+import os, codecs
+import capstone2017.settings as settings
+from django.core.files import File
 
 def processAudioFile(audio_id):
-    audioFile = AudioFile.objects.get(file_id=audio_id)
+    audio_obj = AudioFile.objects.get(file_id=audio_id)
+    path_component = str(audio_obj.file.path).split(os.sep)
+    file_name = path_component[-1].split(".")[0]
+    file_ext = path_component[-1].split(".")[1]
 
-    # 모노로 로드 및 샘플레이트 44100Hz로 변경
-    data, rate = librosa.core.load(audioFile.file.path, mono=True)
+    if not file_ext == "wav":
+        AudioSegment.converter = settings.FFMPEG_LOC
+        audio = AudioSegment.from_file(audio_obj.file.path, file_ext)
+        tmp_dir = settings.MEDIA_ROOT + os.sep + "temp"
+        tmp_loc = tmp_dir + os.sep + file_name + ".wav"
+        print(tmp_loc)
 
-    # 분석
-    duration = librosa.get_duration(y=data, sr=rate)
+        audio.export(tmp_loc, format="wav")
 
-    FFT_SIZE = 4096
+        with codecs.open(tmp_loc, "r", encoding='utf-8', errors='ignore') as f_data:
+            audio_obj.converted_file.save("converted.wav", File(f_data))
 
-    fft_result = librosa.core.stft(data, n_fft=FFT_SIZE)
-    freq_magnitude = np.abs(fft_result)
-    freq_phase = np.abs(fft_result)
+        audio_obj.save()
 
-    mfcc = librosa.feature.mfcc(y=data, sr=rate)
-    pitch = librosa.feature.chroma_cqt(y=data, sr=rate)
-    tempo, frames = librosa.beat.beat_track(y=data, sr=rate)
-
-    # 저장
-    audioFeatures = AudioFeature()
-
-    audioFeatures.audio = audioFile
-
-    audioFeatures.mfcc = pickle.dumps(mfcc)
-    audioFeatures.pitch = pickle.dumps(pitch)
-    audioFeatures.freq_phase = pickle.dumps(freq_phase)
-    audioFeatures.freq_magnitude = pickle.dumps(freq_magnitude)
-
-    audioFeatures.tempo = np.asscalar(tempo)
-
-    audioFeatures.save()
+        os.remove(tmp_loc)
 
 class AudiomanagerConfig(AppConfig):
     name = 'audioManager'

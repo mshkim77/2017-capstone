@@ -133,6 +133,9 @@ STATICFILES_DIRS =  [os.path.join(BASE_DIR, "static")]
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
+# FFMPEG 위치 설정
+FFMPEG_LOC = "/usr/local/bin/ffmpeg"
+
 # 구글 STT 관련 토큰
 GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""
 {
