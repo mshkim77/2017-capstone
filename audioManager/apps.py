@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from .models import AudioFile, AudioFeature
 
 from pydub import AudioSegment
-import os, codecs, librosa, sys, time
+import os, librosa, time
 import capstone2017.settings as settings
 from django.core.files import File
 import numpy as np
@@ -12,7 +12,6 @@ def processAudioFile(audio_id):
     path_component = str(audio_obj.file.path).split(os.sep)
     file_name = path_component[-1].split(".")[0]
     file_ext = path_component[-1].split(".")[1]
-
     if not file_ext == "wav":
         AudioSegment.converter = settings.FFMPEG_LOC
         audio = AudioSegment.from_file(audio_obj.file.path, file_ext)
@@ -21,9 +20,7 @@ def processAudioFile(audio_id):
         print(tmp_loc)
 
         audio.export(tmp_loc, format="wav")
-
-        with codecs.open(tmp_loc, "r", encoding='utf-8', errors='ignore') as f_data:
-            audio_obj.converted_file.save("converted.wav", File(f_data))
+        audio_obj.converted_file.save("converted.wav", File(open(tmp_loc, 'rb')))
 
         audio_obj.save()
 
