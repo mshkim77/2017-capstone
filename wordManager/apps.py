@@ -1,12 +1,11 @@
 from django.apps import AppConfig
-from django.core.exceptions import ObjectDoesNotExist
 
 from audioManager.models import AudioFile
 from sentenceManager.models import Sentence
 from konlpy.tag import Twitter
 from .models import Word
 
-def getWordsFromSentence(audio_id):
+def get_words_from_sentence(audio_id):
     # 오디오 파일 및 문장 로드
     audioFile = AudioFile.objects.get(file_id=audio_id)
     sentence = Sentence.objects.get(pk=audioFile)
@@ -26,6 +25,8 @@ def getWordsFromSentence(audio_id):
             sentence.words.add(Word.objects.get(word=w))
 
         sentence.save()
+
+    return sentence
 
 class wordManagerConfig(AppConfig):
     name = 'wordManager'

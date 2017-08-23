@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'audioManager',
     'wordManager',
     'sentenceManager',
+    'jobManager',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +133,14 @@ STATICFILES_DIRS =  [os.path.join(BASE_DIR, "static")]
 # 미디어 파일 관련
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+# 다중 작업 관련
+djcelery.setup_loader()
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost//'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'amqp'
 
 # FFMPEG 위치 설정
 FFMPEG_LOC = "/usr/local/bin/ffmpeg"

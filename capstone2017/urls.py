@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^audio/', include('audioManager.urls')),
     url(r'^word/', include('wordManager.urls')),
     url(r'^sentence/', include('sentenceManager.urls')),
+    url(r'^job/', include('jobManager.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
