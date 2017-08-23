@@ -36,7 +36,7 @@ def get_audio_info(request, audio_id):
 
 def analyze_audio_file(request, audio_id):
     if AudioFile.objects.filter(pk=audio_id).exists():
-        start_emotion_analysis(audio_id)
+        start_emotion_analysis.apply_async((audio_id,))
         return JsonResponse({"job_id": audio_id, "status": "ok",})
     else:
         return JsonResponse({"job_id": -1, "status": "error",})

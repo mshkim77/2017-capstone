@@ -9,7 +9,6 @@ from wordManager.apps import get_words_from_sentence
 
 from .models import Job
 
-
 @celery_app.task()
 def start_emotion_analysis(audio_id):
     audio_obj = AudioFile(pk=audio_id)

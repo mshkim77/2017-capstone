@@ -1,17 +1,14 @@
-from __future__ import absolute_import
 import os
-
-from django.conf import settings
 from celery import Celery
+from django.conf import settings
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoTest.settings')
+# Indicate Celery to use the default Django settings module
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'capstone2017.settings')
 
 app = Celery('capstone2017')
 
-# This reads, e.g., CELERY_ACCEPT_CONTENT = ['json'] from settings.py:
 app.config_from_object('django.conf:settings')
-
-# For autodiscover_tasks to work, you must define your tasks in a file called 'tasks.py'.
+# This line will tell Celery to autodiscover all your tasks.py that are in your app folders
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @app.task(bind=True)

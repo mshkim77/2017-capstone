@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'wordManager',
     'sentenceManager',
     'jobManager',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
