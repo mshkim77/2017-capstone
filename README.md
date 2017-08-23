@@ -14,9 +14,8 @@
 - 정준혁 (부경대학교 컴퓨터공학과)
 
 ### 사용할 언어 및 기술
-- (Backend) Python 3 with Flask, NumPy, SciPy
-- (Backend) Tensorflow
-- (Backend) Hadoop with Casandra
-- (Frontend) Elm
-- (Frontend) HTML, CSS, JavaScript
-- (Frontend) Apache Cordova
+- (Backend) <Web & Engine> Python 3 with Django, NumPy, SciPy, Tensorflow
+- (Backend) <Audio Processing> Librosa, Pydub, ffmpeg
+- (Backend) <Database> MongoDB
+- (Frontend) HTML5, CSS, JavaScript
+- (Frontend) WebRTC

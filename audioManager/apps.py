@@ -166,5 +166,7 @@ def do_extract_feature(audio_id):
 
         feature.save()
 
+        return feature
+
 class AudiomanagerConfig(AppConfig):
     name = 'audioManager'
