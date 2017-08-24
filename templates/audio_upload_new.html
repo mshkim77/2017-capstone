@@ -4,14 +4,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>MetalCode :: Record New</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 	<script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.microphone.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="./css/HTML_reset_css.css"/>
+	<link rel="stylesheet" type="text/css" href="{% static "/css/HTML_reset_css.css" %}"/>
 	<style type="text/css">
 
 		body {
@@ -280,15 +280,19 @@
 				playPause();
 				console.log("play pause");
 
-			    //downBtn.disabled = true;
-
 	    		sendBtn.onclick = sendFile;
 			    sendBtn.src = "{% static "/img/done1.png" %}";
+			    // 수정
+				btn.onclick = toggleRecording;
+			    btn.src = "{% static "/img/start.png" %}"
 
 			} else {
 
 	    		sendBtn.onclick = null;
 			    sendBtn.src = "{% static "/img/done0.png" %}";
+			    //수정됨
+				btn.onclick = null;
+			    btn.src = "{% static "/img/start0.png" %}";
 
 				play();
 				console.log("play start");
