@@ -9,7 +9,7 @@ from jobManager.models import Job
 from math import ceil
 
 @csrf_exempt
-def post_new_audio(request):
+def record_new_audio(request):
     if request.method == "POST":
 
         form = FormAddNewAudioFile(request.POST or None, request.FILES or None)
@@ -38,7 +38,39 @@ def post_new_audio(request):
 
     else:
         form = FormAddNewAudioFile()
-        return render(request, 'audio_upload_new.html', {"form": form})
+        return render(request, 'audio_record_new.html', {"form": form})
+
+@csrf_exempt
+def post_new_audio(request):
+    if request.method == "POST":
+
+        form = FormAddNewAudioFile(request.POST or None, request.FILES or None)
+
+        if form.is_valid():
+            job = Job()
+
+            audio_obj = AudioFile()
+            audio_obj.file = form.cleaned_data['audio_file']
+            audio_obj.save()
+
+            job.status = "AUDIO_FILE_UPLOAD_DONE"
+            job.audio = audio_obj
+            job.alert_msg = "오디오 파일이 성공적으로 업로드 되었습니다."
+            job.save()
+
+            is_saved = True
+            audio_id = audio_obj.file_id
+
+            start_emotion_analysis.apply_async((audio_id,))
+
+            return JsonResponse({"saved": is_saved, "job_id": audio_id})
+
+        else:
+            return render(request, 'audio_post_new.html', {"form": form})
+
+    else:
+        form = FormAddNewAudioFile()
+        return render(request, 'audio_post_new.html', {"form": form})
 
 def post_new_audio_with_emotions(request):
     if request.method == "POST":

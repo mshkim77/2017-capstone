@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 	<meta charset="UTF-8">
 	<title>MetalCode :: Record New</title>
@@ -389,11 +389,11 @@
 			$.ajax({
                 type: "POST",
 			    enctype: "multipart/form-data",
-			    url: "/audio/new/",
+			    url: "/audio/record/",
 			    data: fd,
 			    processData: false,
 			    contentType: false,
-                success: function f_userCheck(data) {
+                success: function (data) {
                     if(data.saved) {
                         job_id = data.job_id;
                         timerVal = setInterval(function f_userCheck() {
@@ -469,7 +469,7 @@
             <div class="inner">
                 <div>
                     <img src="{% static "img/loading.gif" %}" width="200px" height="200px"/>
-                    <p class="message" id="status_message">서버 상태 메시지</p>
+                    <p class="message" id="status_message"></p>
                 </div>
             </div>
           </div>
@@ -479,11 +479,3 @@
 
 </body>
 </html>
-
-{#<form method="POST" action="/audio/new/" enctype="multipart/form-data">#}
-{#    {% csrf_token %}#}
-{#    {{ form.errors }}#}
-{#    <label for="audio_file">오디오 파일 선택: </label>#}
-{#    <input type="file" id="audio_file" name="audio_file" accept="audio/wav">#}
-{#    <input type="submit" value="업로드" />#}
-{#</form>#}
