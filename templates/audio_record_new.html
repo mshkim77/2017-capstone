@@ -134,6 +134,12 @@
             display:none;
         }
 
+        .uploadForm {
+	    	position: fixed;
+	    	right : 3%;
+	    	top : 3%;
+	    }
+
 	</style>
 </head>
 <body>
@@ -447,6 +453,78 @@
 			});
 	    }
 
+	    function fileUpload() {
+            document.all.file1.click();
+            $(".fileForm").change(function () {
+                var data = new FormData();
+                var files = $(".fileForm").get(0).files;
+                if (files.length > 0) {
+                    data.append("audio_file", files[0]);
+                }
+                else {
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    enctype: "multipart/form-data",
+                    url: "/audio/record/",
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.saved) {
+                            job_id = data.job_id;
+                            timerVal = setInterval(function f_userCheck() {
+                                $.ajax({
+                                    url: "/job/status/" + job_id, // 호출할 jsp 파일
+                                    type: "GET",
+                                    success: function (data) {
+                                        if (data.job_status === "DONE") {
+                                            clearInterval(timerVal);
+                                            document.getElementById("status_message").innerHTML = data.msg;
+                                            location.href = "/audio/" + job_id;
+                                        }
+                                        else if (data.job_status === "ERROR") {
+                                            clearInterval(timerVal);
+                                            $('.wrap-loading').addClass('display-none');
+                                            alert(data.msg);
+                                        }
+                                        else {
+                                            document.getElementById("status_message").innerHTML = data.msg;
+                                            console.log(data.job_status);
+                                        }
+                                    },
+                                    error: function () {
+                                        $('.wrap-loading').addClass('display-none');
+                                        alert("err");
+                                    },
+                                    beforeSend: function () {
+                                        //이미지 보여주기 처리
+                                        $('.wrap-loading').removeClass('display-none');
+                                        $(".reflected").css("opacity", "0.0");
+                                    },
+                                    complete: function () {
+                                    }
+                                });
+                            }, 100);
+
+                        }
+                    },
+                    error: function () {
+                        console.log("Err");
+                    },
+                    beforeSend: function () {
+                        //이미지 보여주기 처리
+                        $('.wrap-loading').removeClass('display-none');
+                        $(".reflected").css("opacity", "0.0");
+                    },
+                    complete: function () {
+                    }
+                }).done(function (data) {
+                    console.log(data);
+                });
+            });
+        }
 	   function timeCheck() {
 
 		   if(isTimer) {
@@ -474,8 +552,12 @@
             </div>
           </div>
     </div>
-
 	</div>
+
+    <div class="uploadForm">
+		<input type=file name='file1' class="fileForm" style='display: none;'>
+		<img src="{% static "img/diskette.png" %}" width="20px" height="20px" border='0' onclick='fileUpload();'/>
+    </div>
 
 </body>
 </html>
