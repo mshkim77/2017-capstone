@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>metal-code</title>
+	<meta name="Resource-type" content="Document" />
+
+    {% load static %}
+
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="{% static 'liquidFillGauge.js' %}" language="JavaScript"></script>
+
+	<link rel="stylesheet" type="text/css" href="{% static 'jquery.fullPage.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'examples.css' %}" />
+	<style>
+
+
+	body{
+		color: #333;
+		font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
+	}
+
+    .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+
+	/* Style for our header texts
+	* --------------------------------------- */
+	h1{
+		font-size: 5em;
+		font-family: arial,helvetica;
+		margin:0;
+		padding:0;
+	}
+	h2{
+		font-size: 2em;
+		margin: 0 0 18px 0;
+		font-family: arial,helvetica;
+	}
+
+	/* Common styles
+	* --------------------------------------- */
+	img{
+	    -webkit-transition: all 0.7s ease-out;
+		-moz-transition: all 0.7s ease-out;
+		-o-transition: all 0.7s ease-out;
+		transition: all 0.7s ease-out;
+	}
+	.section{
+		text-align:center;
+		overflow:hidden;
+	}
+	.wrap{
+		width: 1180px;
+		height: 100%;
+		margin-left: auto;
+		margin-right: auto;
+		position: relative;
+	}
+	.box{
+		text-align: left;
+		color: #808080;
+		font-size: 1.2em;
+		line-height: 1.6em;
+	}
+
+
+
+
+	/* Section 0
+	* --------------------------------------- */
+
+	#section0 .horizontalBox {
+		display: inline;
+	}
+
+	#section0 .horizontalBox svg{
+		width: 100%;
+	    margin-top: 19%;
+	    margin-left: -10%;
+	}
+
+	#section0 .horizontalBox div{
+		color: #fff;
+	    margin-top: 1%;
+	    margin-left: -10%;
+		font-size: x-large;
+	}
+
+
+
+	/* Section 1
+	* --------------------------------------- */
+
+	#section1{
+		padding: 60px 0;
+	}
+	#section1 img{
+		height: 100%;
+		margin: 0 0 0 0;
+	}
+
+
+
+	/* Section 2
+	* --------------------------------------- */
+
+	#section2 .horizontalBox {
+		display: inline-flex;
+		width: 100%;
+		margin-top: 17%;
+		vertical-align: center;
+		color : #fff;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox {
+    	text-align: left;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox:nth-child(1) {
+		margin-right: 10%;
+    	margin-left: 17%;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox>div {
+		text-align: left;
+		vertical-align: middle;
+		margin-top: 5%;
+		margin-bottom: 5%;
+		width: 280px;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox .emotionColor {
+		width: 25px;
+		height: 25px;
+		display: inline-block;
+		vertical-align: middle;
+		background-color: #fff;
+		margin-right: 10%;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox div span {
+		font-size: medium;
+		height: 25px;
+		margin : 0 0 0 0;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	#section2 .wrap .horizontalBox .emotionBox .emotionPer {
+		text-align: right;
+		float: right;
+	}
+
+
+
+	/*screen resolutions between 620px and 800px*/
+	@media all and (min-width: 620px) and (max-width: 800px){
+		#section1 .imgsContainer{
+			margin-top: -278px;
+			margin-left: -685px;
+			width: 647px;
+			height: 563px;
+		}
+	}
+
+	/*screen resolutions lower than 620px*/
+	@media all and (max-width: 620px){
+		#section1 .imgsContainer{
+			margin-top: -208px;
+			margin-left: -516px;
+			width: 534px;
+			height: 464px;
+		}
+	}
+
+	/* Overwriting fullPage.js tooltip color
+	* --------------------------------------- */
+	.fp-tooltip{
+		color: #fff;
+	}
+	#fp-nav span, .fp-slidesNav span{
+		border-color: #fff;
+	}
+
+	#fp-nav li .active span, .fp-slidesNav .active span{
+		background: #fff;
+	}
+
+	/* add
+	*/
+	#fp-nav ul li a span, .fp-slidesNav ul li a span {
+		background: #BDBDBD;
+	}
+
+	</style>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+	<script type="text/javascript" src="{% static 'jquery.fullPage.js' %}"></script>
+	<script type="text/javascript" src="{% static 'examples.js' %}"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function() {
+			$('#fullpage').fullpage({
+				'verticalCentered': false,
+				'css3': true,
+				'sectionsColor': ['#2A3341', '#2A3341', '#2A3341'],
+				//['#242424', '#2A3341', '#485461']
+				'navigation': true,
+				'navigationPosition': 'right',
+				'navigationTooltips': ['Emotion', 'Graph', 'Detail'],
+			});
+		});
+
+	</script>
+
+</head>
+<body>
+
+<div id="fullpage">
+
+	<div class="section" id="section0">
+		<div class="wrap">
+			<div class="horizontalBox">
+				<svg id="fillgauge1" width="97%" height="250"></svg>
+				<div onmouseover="setKoInfo(this)" onmouseout="setEnInfo(this)">Emotion</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section " id="section1">
+		<img src="{% static 'imgs/emotionGraph.png' %}" alt="iphone" />
+	</div>
+
+	<div class="section moveDown" id="section2">
+		<div class="wrap">
+			<div class="horizontalBox">
+				<div class="emotionBox">
+					<div>
+						<div class="emotionColor" style="background-color: #DD0C81"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Annoyance</span>
+						<span class="emotionPer">{{ audio_data.rage }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #F8A631"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Interest</span>
+						<span class="emotionPer">{{ audio_data.vigilance }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #F3E93F"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Serenity</span>
+						<span class="emotionPer">{{ audio_data.ecstasy }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #CFDB3C"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Acceptance</span>
+						<span class="emotionPer">{{ audio_data.admiration }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #A4CA4A"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Apprehension</span>
+						<span class="emotionPer">{{ audio_data.terror }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #65BFAC"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Distraction</span>
+						<span class="emotionPer">{{ audio_data.amazement }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #48BEEB"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Pensiveness</span>
+						<span class="emotionPer">{{ audio_data.grief }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #954395"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Boredom</span>
+						<span class="emotionPer">{{ audio_data.loathing }}%</span>
+					</div>
+				</div>
+				<div class="emotionBox">
+					<div>
+						<div class="emotionColor" style="background-color: #D08789"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Aggressiveness</span>
+						<span class="emotionPer">{{ audio_data.aggressiveness }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #E0B377"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Optimistic</span>
+						<span class="emotionPer">{{ audio_data.optimistic }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #DBCF78"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Love</span>
+						<span class="emotionPer">{{ audio_data.love }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #B9C677"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Submission</span>
+						<span class="emotionPer">{{ audio_data.submission }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #8FAE7E"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Awe</span>
+						<span class="emotionPer">{{ audio_data.awe }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #79AAA9"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Disapproval</span>
+						<span class="emotionPer">{{ audio_data.disapproval }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #90A1BE"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Remorse</span>
+						<span class="emotionPer">{{ audio_data.remorse }}%</span>
+					</div>
+					<div>
+						<div class="emotionColor" style="background-color: #BF81BE"></div>
+						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Contempt</span>
+						<span class="emotionPer">{{ audio_data.contempt }}%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+    <script src="{% static 'changeContent.js' %}" language="JavaScript"></script>
+
+</body>
+</html>

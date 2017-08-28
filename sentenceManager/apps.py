@@ -47,7 +47,7 @@ def get_sentence_from_audio(audio_id):
         # 문장 객체 저장
         sentence.save()
 
-        return sentence
+        return sentence.hasError
 
 
 

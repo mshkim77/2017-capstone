@@ -7,6 +7,7 @@ from audioManager.models import AudioFile
 class Job(models.Model):
     audio = models.ForeignKey(AudioFile, on_delete=models.CASCADE, primary_key=True)
     status = models.CharField(max_length=128)
+    alert_msg = models.CharField(max_length=255, null=True)
     last_update = models.DateTimeField(default=timezone.now())
 
     def save(self, *args, **kwargs):

@@ -25,8 +25,10 @@ def get_words_from_sentence(audio_id):
             sentence.words.add(Word.objects.get(word=w))
 
         sentence.save()
+        return True
 
-    return sentence
+    else:
+        return False
 
 class wordManagerConfig(AppConfig):
     name = 'wordManager'
