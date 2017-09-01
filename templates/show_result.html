@@ -146,9 +146,13 @@
 		margin-right: 0;
 	}
 
-	#section2 .wrap .horizontalBox .emotionBox .emotionPer {
+	#section2 .wrap .horizontalBox .emotionBox .emotionView {
 		text-align: right;
 		float: right;
+	}
+
+	.display-none{
+	    display: none;
 	}
 
 
@@ -231,7 +235,7 @@
 	</div>
 
 	<div class="section " id="section1">
-		<img src="{% static 'imgs/emotionGraph.png' %}" alt="iphone" />
+		<img src="{% static 'imgs/emotionGraph.png' %}" alt="Emotion Graph" />
 	</div>
 
 	<div class="section moveDown" id="section2">
@@ -241,84 +245,100 @@
 					<div>
 						<div class="emotionColor" style="background-color: #DD0C81"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Annoyance</span>
-						<span class="emotionPer">{{ audio_data.rage }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.rage }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #F8A631"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Interest</span>
-						<span class="emotionPer">{{ audio_data.vigilance }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.vigilance }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #F3E93F"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Serenity</span>
-						<span class="emotionPer">{{ audio_data.ecstasy }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.ecstasy }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #CFDB3C"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Acceptance</span>
-						<span class="emotionPer">{{ audio_data.admiration }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.admiration }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #A4CA4A"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Apprehension</span>
-						<span class="emotionPer">{{ audio_data.terror }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.terror }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #65BFAC"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Distraction</span>
-						<span class="emotionPer">{{ audio_data.amazement }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.amazement }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #48BEEB"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Pensiveness</span>
-						<span class="emotionPer">{{ audio_data.grief }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.grief }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #954395"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Boredom</span>
-						<span class="emotionPer">{{ audio_data.loathing }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.loathing }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 				</div>
 				<div class="emotionBox">
 					<div>
 						<div class="emotionColor" style="background-color: #D08789"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Aggressiveness</span>
-						<span class="emotionPer">{{ audio_data.aggressiveness }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.aggressiveness }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #E0B377"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Optimistic</span>
-						<span class="emotionPer">{{ audio_data.optimistic }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.optimistic }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #DBCF78"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Love</span>
-						<span class="emotionPer">{{ audio_data.love }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.love }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #B9C677"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Submission</span>
-						<span class="emotionPer">{{ audio_data.submission }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.submission }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #8FAE7E"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Awe</span>
-						<span class="emotionPer">{{ audio_data.awe }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.awe }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #79AAA9"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Disapproval</span>
-						<span class="emotionPer">{{ audio_data.disapproval }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.disapproval }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #90A1BE"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Remorse</span>
-						<span class="emotionPer">{{ audio_data.remorse }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.remorse }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 					<div>
 						<div class="emotionColor" style="background-color: #BF81BE"></div>
 						<span class="emotionName" onmouseover="setKoInfo(this);" onmouseout="setEnInfo(this);">Contempt</span>
-						<span class="emotionPer">{{ audio_data.contempt }}%</span>
+						<span class="emotionPer display-none">{{ audio_data.contempt }}%</span>
+						<span class="emotionView">0%</span>
 					</div>
 				</div>
 			</div>

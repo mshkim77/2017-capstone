@@ -3,27 +3,35 @@
 let ANNOYANCE_EN        = "Annoyance";      let ANNOYANCE_KO        = "성가심, 귀찮음, 괴로움";
 let ANGER_EN            = "Anger";          let ANGER_KO            = "화, 분노";
 let RAGE_EN             = "Rage";           let RAGE_KO             = "분노, 격노, 격분";
+
 let INTEREST_EN         = "Interest";       let INTEREST_KO         = "흥미, 호기심, 관심";
 let ANTICIPATION_EN     = "Anticipation";   let ANTICIPATION_KO     = "예측, 기대";
 let VIGILANCE_EN        = "Vigilance";      let VIGILANCE_KO        = "경계, 조심";
+
 let SERENITY_EN         = "Serenity";       let SERENITY_KO         = "안정, 평온, 차분함";
 let JOY_EN              = "Joy";            let JOY_KO              = "기쁨, 환희, 만족";
 let ECSTASY_EN          = "Ecstasy";        let ECSTASY_KO          = "황홀, 환희, 기쁨";
+
 let ACCEPTANCE_EN       = "Acceptance";     let ACCEPTANCE_KO       = "수용, 묵인, 신봉";
 let TRUST_EN            = "Trust";          let TRUST_KO            = "신뢰, 신임";
 let ADMIRATION_EN       = "Admiration";     let ADMIRATION_KO       = "감탄, 존경, 탄복";
+
 let APPREHENSION_EN     = "Apprehension";   let APPREHENSION_KO     = "불안, 걱정, 두려움";
 let FEAR_EN             = "Fear";           let FEAR_KO             = "공포, 두려움, 무서움";
 let TERROR_EN           = "Terror";         let TERROR_KO           = "공포, 끔찍함, 소름끼침";
+
 let DISTRACTION_EN      = "Distraction";    let DISTRACTION_KO      = "주의 산만, 방심";
 let SURPRISE_EN         = "Surprise";       let SURPRISE_KO         = "놀람, 경악";
 let AMAZEMENT_EN        = "Amazement";      let AMAZEMENT_KO        = "놀림, 실색";
+
 let PENSIVENESS_EN      = "Pensiveness";    let PENSIVENESS_KO      = "고뇌, 수심";
 let SADNESS_EN          = "Sadness";        let SADNESS_KO          = "슬픔, 비애, 불행";
 let GRIEF_EN            = "Grief";          let GRIEF_KO            = "고뇌, 한탄, 비통";
+
 let BOREDOM_EN          = "Boredom";        let BOREDOM_KO          = "권태, 지루함, 따분함";
 let DISGUST_EN          = "Disgust";        let DISGUST_KO          = "혐오, 역겨움, 넌더리";
 let LOATHING_EN         = "Loathing";       let LOATHING_KO         = "혐오, 증오";
+
 let AGGRESSIVENESS_EN   = "Aggressiveness"; let AGGRESSIVENESS_KO   = "공격성, 적극성";
 let OPTIMISTIC_EN       = "Optimistic";     let OPTIMISTIC_KO       = "낙관, 긍정, 희망";
 let LOVE_EN             = "Love";           let LOVE_KO             = "사랑, 기쁨";
@@ -34,103 +42,188 @@ let REMORSE_EN          = "Remorse";        let REMORSE_KO          = "후회, �
 let CONTEMPT_EN         = "Contempt";       let CONTEMPT_KO         = "경멸, 멸시, 무시";
 
 
+
     function setDetailEmotion() {
 
         var box = document.getElementsByClassName("emotionBox");
-        var space = box[0].getElementsByTagName("span");
-        
+
         var deepHigh = 70;
         var deepLow = 40; 
 
-        for (var i = 0; i < space.length; i = i + 2) {
+        var space = box[0].getElementsByTagName("span");
+
+        for (var i = 0; i < space.length; i = i + 3) {
             
             var emotion = space[i].innerHTML;
             var per = space[i+1].innerHTML.split("%")[0];
-            var info = "";
+            var perNum = 0;
 
+            var info = "";
+            
             switch(emotion) {
-                case ANNOYANCE_EN :
+                case ANNOYANCE_EN:
                     if(per >= deepHigh) {
                         info = RAGE_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = ANGER_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = ANNOYANCE_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case INTEREST_EN :
                     if(per >= deepHigh) {
                         info = VIGILANCE_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = ANTICIPATION_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = INTEREST_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case SERENITY_EN :
                     if(per >= deepHigh) {
                         info = ECSTASY_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = JOY_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = SERENITY_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case ACCEPTANCE_EN :
                     if(per >= deepHigh) {
                         info = ADMIRATION_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = TRUST_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = ACCEPTANCE_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case APPREHENSION_EN :
                     if(per >= deepHigh) {
                         info = TERROR_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = FEAR_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = APPREHENSION_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case DISTRACTION_EN :
                     if(per >= deepHigh) {
                         info = AMAZEMENT_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = SURPRISE_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = DISTRACTION_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case PENSIVENESS_EN :
                     if(per >= deepHigh) {
                         info = GRIEF_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = SADNESS_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = PENSIVENESS_EN;
+                        perNum = per * 3;
                     }
                     break;
 
                 case BOREDOM_EN :
                     if(per >= deepHigh) {
                         info = LOATHING_EN;
+                        perNum = (per - 60) * 2.5;
                     } else if(per < deepHigh && per >= deepLow) {
                         info = DISGUST_EN;
+                        perNum = (per - 30) * 3;
                     } else {
                         info = BOREDOM_EN;
+                        perNum = per * 3;
                     }
                     break;
             }
 
             space[i].innerHTML = info;
+            space[i+2].innerHTML = perNum + " %";
+         }
+
+        space = box[1].getElementsByTagName("span");
+
+        for (var i = 0; i < space.length; i = i + 3) {
+            
+            var emotion = space[i].innerHTML;
+            var per = space[i+1].innerHTML.split("%")[0];
+            var perNum = 0;
+
+            var info = "";
+            
+            switch(emotion) {
+                case AGGRESSIVENESS_EN :
+                    info = AGGRESSIVENESS_EN;
+                    perNum = per;
+                    break;
+
+                case OPTIMISTIC_EN :
+                    info = OPTIMISTIC_EN;
+                    perNum = per;
+                    break;
+
+                case LOVE_EN :
+                    info = LOVE_EN;
+                    perNum = per;
+                    break;
+
+                case SUBMISSION_EN :
+                    info = SUBMISSION_EN;
+                    perNum = per;
+                    break;
+
+                case AWE_EN :
+                    info = AWE_EN;
+                    perNum = per;
+                    break;
+
+                case DISAPPROVAL_EN :
+                    info = DISAPPROVAL_EN;
+                    perNum = per;
+                    break;
+
+                case REMORSE_EN :
+                    info = REMORSE_EN;
+                    perNum = per;
+                    break;
+                    
+                case CONTEMPT_EN :
+                    info = CONTEMPT_EN;
+                    perNum = per;
+                    break;
+            }
+
+            space[i].innerHTML = info;
+            space[i+2].innerHTML = perNum + " %";
          }
         
     }
@@ -144,20 +237,23 @@ let CONTEMPT_EN         = "Contempt";       let CONTEMPT_KO         = "경멸, �
 
     	var tempEm = space[0].innerHTML;
     	var tempPer = parseInt(space[1].innerHTML.split("%")[0]);
+        var tempPerNum = parseInt(space[2].innerHTML.split("%")[0]);
 
-    	for (var i = 2; i < space.length; i = i+2) {
+    	for (var i = 3; i < space.length; i = i+3) {
     		if(tempPer < parseInt(space[i+1].innerHTML.split("%")[0])) {
     			tempEm = space[i].innerHTML;
     			tempPer = parseInt(space[i+1].innerHTML.split("%")[0]);
+                tempPerNum = parseInt(space[i+2].innerHTML.split("%")[0]);
     		}
     	}
 
         space = box[1].getElementsByTagName("span");
 
-    	for (var i = 0; i < space.length; i = i+2) {
+    	for (var i = 0; i < space.length; i = i+3) {
     		if(tempPer < parseInt(space[i+1].innerHTML.split("%")[0])) {
     			tempEm = space[i].innerHTML;
     			tempPer = parseInt(space[i+1].innerHTML.split("%")[0]);
+                tempPerNum = parseInt(space[i+2].innerHTML.split("%")[0]);
     		}
     	}
 
@@ -165,56 +261,72 @@ let CONTEMPT_EN         = "Contempt";       let CONTEMPT_KO         = "경멸, �
     	space = box[0].getElementsByTagName("div")[0];
     	space.innerHTML = tempEm;
 
-    	var cColor = "#C40B73";
-    	var tColor = "#C40B73";
-    	var wTextColor = "#F19ECD";
-	    var wColor = "#E755A7";	
+    	var cColor = "#000000";
+    	var tColor = "#000000";
+    	var wTextColor = "#000000";
+	    var wColor = "#000000";	
 
     	switch (tempEm) {
-    		case ANNOYANCE_EN, ANGER_EN, RAGE_EN :
+    		case ANNOYANCE_EN :
+            case ANGER_EN :
+            case RAGE_EN :
 		    	cColor = "#DD0C81";
 		    	tColor = "#DD0C81";
 		    	wTextColor = "#EC7ABA";
 			    wColor = "#E755A7";	
     			break;
-			case INTEREST_EN, ANTICIPATION_EN, VIGILANCE_EN :
+			case INTEREST_EN :
+            case ANTICIPATION_EN :
+            case VIGILANCE_EN :
 		    	cColor = "#F8A631";
 		    	tColor = "#F8A631";
 		    	wTextColor = "#FCCF81";
 			    wColor = "#FCC25E";	
     			break;
-			case SERENITY_EN, JOY_EN, ECSTASY_EN :
+			case SERENITY_EN :
+            case JOY_EN :
+            case ECSTASY_EN :
 		    	cColor = "#F3E93F";
 		    	tColor = "#F3E93F";
 		    	wTextColor = "#F9F487";
 			    wColor = "#F7F166";	
     			break;
-			case ADMIRATION_EN, TRUST_EN, ACCEPTANCE_EN :
+			case ADMIRATION_EN :
+            case TRUST_EN :
+            case ACCEPTANCE_EN :
 		    	cColor = "#CFDB3C";
 		    	tColor = "#CFDB3C";
 		    	wTextColor = "#E5EC88";
 			    wColor = "#DDE768";	
     			break;
 
-			case APPREHENSION_EN, FEAR_EN, TERROR_EN :
+			case APPREHENSION_EN :
+            case FEAR_EN :
+            case TERROR_EN :
 		    	cColor = "#A4CA4A";
 		    	tColor = "#A4CA4A";
 		    	wTextColor = "#CCE396";
 			    wColor = "#BFDB79";	
     			break;
-			case DISTRACTION_EN, SURPRISE_EN, AMAZEMENT_EN :
+			case DISTRACTION_EN :
+            case SURPRISE_EN :
+            case AMAZEMENT_EN :
 		    	cColor = "#65BFAC";
 		    	tColor = "#65BFAC";
 		    	wTextColor = "#A8DCBD";
 			    wColor = "#91D3AB";	
     			break;
-			case PENSIVENESS_EN, SADNESS_EN, GRIEF_EN :
+			case PENSIVENESS_EN :
+            case SADNESS_EN :
+            case GRIEF_EN :
 		    	cColor = "#48BEEB";
 		    	tColor = "#48BEEB";
 		    	wTextColor = "#96DBF5";
 			    wColor = "#7AD1F2";	
     			break;
-			case BOREDOM_EN, DISGUST_EN, LOATHING_EN :
+			case BOREDOM_EN :
+            case DISGUST_EN :
+            case LOATHING_EN :
 		    	cColor = "#954395";
 		    	tColor = "#954395";
 		    	wTextColor = "#C596C6";
@@ -281,7 +393,7 @@ let CONTEMPT_EN         = "Contempt";       let CONTEMPT_KO         = "경멸, �
 	    config1.circleThickness = 0.1;
 	    config1.textVertPosition = 0.5;
 	    config1.waveAnimateTime = 1000;
-	    var gauge1 = loadLiquidFillGauge("fillgauge1", tempPer, config1);
+	    var gauge1 = loadLiquidFillGauge("fillgauge1", tempPerNum, config1);
 
     }
 
@@ -364,7 +476,7 @@ let CONTEMPT_EN         = "Contempt";       let CONTEMPT_KO         = "경멸, �
                 break;
 
 			case BOREDOM_EN :
-    			info = BOREDOM_EN;
+    			info = BOREDOM_KO;
     			break;
             case DISGUST_EN :
                 info = DISGUST_KO;
