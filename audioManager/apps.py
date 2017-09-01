@@ -39,7 +39,7 @@ def feature_extraction(audio_id):
     path = audio_obj.file.path
 
     start_point = time.time()
-    print("== 파일 " + audio_id + " 처리 시작.")
+    print("== 파일 " + str(audio_id) + " 처리 시작.")
 
     # 데이터 모노로 로드
     data, rate = librosa.core.load(path, mono=True)
@@ -117,7 +117,7 @@ def feature_extraction(audio_id):
     print("평균과 최소의 하모닉 차이: " + str(diff_avg_harmonic_min))
     print("최소-최대의 하모닉 차이: " + str(diff_avg_harmonic_maxmin))
 
-    print("== 파일 " + audio_id + " 처리에 걸린시간: " + str(round(time.time() - start_point, 2)))
+    print("== 파일 " + str(audio_id) + " 처리에 걸린시간: " + str(round(time.time() - start_point, 2)))
 
     results = [audio_id, duration, tempo,
                avg_mfcc, max_mfcc, min_mfcc, var_mfcc, std_mfcc,
@@ -166,7 +166,11 @@ def do_extract_feature(audio_id):
 
         feature.save()
 
-        return feature
+        return True
+
+    else:
+        return False
+
 
 class AudiomanagerConfig(AppConfig):
     name = 'audioManager'

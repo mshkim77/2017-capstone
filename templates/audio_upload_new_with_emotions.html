@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audio file upload</title>
+
+    {% load static %}
+    {% include 'material/includes/material_css.html' %}
+    <script src="{% static 'material/js/jquery.js' %}"></script>
+    {% include 'material/includes/material_js.html' %}
+</head>
+<body>
+
+{% load material_form %}
+
+{% if saved %}
+    <p>저장되었습니다.</p>
+{% endif %}
+
+<form method="POST" action="/audio/add/" enctype="multipart/form-data" class="viewform">
+    {% csrf_token %}
+    {% form form=form %}{% endform %}
+    <button type="submit" name="_submit" class="btn btn-primary btn-lg">업로드</button>
+</form>
+</body>
+</html>

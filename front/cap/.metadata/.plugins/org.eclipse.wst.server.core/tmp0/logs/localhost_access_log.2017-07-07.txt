@@ -1,7 +1,0 @@
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:45:47 +0900] "GET /WebRTC/basicSend.html HTTP/1.1" 200 303
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:45:54 +0900] "POST /WebRTC/downloadFile.jsp HTTP/1.1" 200 181
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:45:54 +0900] "POST /WebRTC/downloadFile.jsp HTTP/1.1" 200 181
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:47:22 +0900] "GET /WebRTC/basicSend.html HTTP/1.1" 200 303
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:47:26 +0900] "POST /WebRTC/downloadFile.jsp HTTP/1.1" 200 237
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:49:14 +0900] "GET /WebRTC/reTest.html HTTP/1.1" 200 5548
-0:0:0:0:0:0:0:1 - - [07/Jul/2017:21:51:02 +0900] "GET /WebRTC/reTest.html HTTP/1.1" 200 5629

@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'material',
+    'material.frontend',
+    'material.admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     'sentenceManager',
     'jobManager',
     'djcelery',
+    'tensorManager',
 ]
 
 MIDDLEWARE = [
@@ -144,7 +148,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'amqp'
 
 # FFMPEG 위치 설정
-FFMPEG_LOC = "/usr/local/bin/ffmpeg"
+FFMPEG_LOC = "/Volumes/Transcend/Library/homebrew/bin/ffmpeg"
 
 # 구글 STT 관련 토큰
 GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""

@@ -1,0 +1,194 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+	<title>MetalCode :: Attach New</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.7/wavesurfer.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.microphone.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="{% static "css/HTML_reset_css.css" %}"/>
+    <style type="text/css">
+        @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+        html, body, p {
+            font-family: "Nanum Gothic", Verdana, Sans;
+            text-align: center;
+            background-color: #2A3340;
+            color: #FFF;
+            line-height: 28px;
+            font-size: 16px;
+        }
+
+        .outer {
+            display: table;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+        }
+
+        .middle {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .inner {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+
+        .upload_form .file_upload_label {
+            background-color: #FFF;
+            color: #2A3340;
+            padding: 12px;
+        }
+
+        .upload_form input[type=file] {
+            display: none;
+        }
+
+        .upload_form input[type=submit] {
+            display: none;
+        }
+        .wrap-loading { /* 화면 전체를 어둡게 합니다. */
+            position: fixed;
+            left:0;
+            right:0;
+            top:0;
+            bottom:0;
+            background: rgba(0,0,0,0.4); /*not in ie */
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#20000000', endColorstr='#20000000');    /* ie */
+            z-index : 1000;
+	    }
+
+        .wrap-loading .message {
+            padding: 16px;
+            color: #FFF;
+            font-family: "Nanum Gothic", Verdana, Sans;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .display-none{ /*감추기*/
+            display:none;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="outer">
+    <div class="middle">
+        <div class="inner">
+            <div class="upload_form">
+                <form method="POST" action="/audio/add/" enctype="multipart/form-data" id="audio_upload_form">
+                    {% csrf_token %}
+                    {{ form.errors }}
+                    <label for="audio_file" class="file_upload_label">오디오 파일 첨부</label>
+                    <input type="file" id="audio_file" name="audio_file" accept="audio/wav">
+                    <input type="submit" value="업로드" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrap-loading display-none">
+        <div class="outer">
+          <div class="middle">
+            <div class="inner">
+                <div>
+                    <img src="{% static "img/loading.gif" %}" width="200px" height="200px"/>
+                    <p class="message" id="status_message"></p>
+                </div>
+            </div>
+          </div>
+        </div>
+</div>
+
+<script>
+    document.getElementById('audio_file').addEventListener('change', didChangeAttachedAudioFile);
+
+    function didChangeAttachedAudioFile(e) {
+        var file = e.target.files[0]; // 파일
+        submitAudioFile(file)
+    }
+
+    function submitAudioFile(file) {
+        console.log("전송!");
+
+        var fd = new FormData();
+        fd.append("audio_file", file, file.name);
+
+        $.ajax({
+            type: "POST",
+            enctype: "multipart/form-data",
+            url: "/audio/add/",
+            processData: false,
+            contentType: false,
+            data: fd,
+            success: function (data) {
+                if (data.saved) {
+                    job_id = data.job_id;
+                    timerVal = setInterval(function f_userCheck() {
+                        $.ajax({
+                            url: "/job/status/" + job_id, // 호출할 jsp 파일
+                            type: "GET",
+                            success: function (data) {
+                                if (data.job_status === "DONE") {
+                                    clearInterval(timerVal);
+                                    document.getElementById("status_message").innerHTML = data.msg;
+                                    location.href = "/audio/" + job_id;
+                                }
+                                else if (data.job_status === "ERROR") {
+                                    clearInterval(timerVal);
+                                    $('.wrap-loading').addClass('display-none');
+                                    alert(data.msg);
+                                }
+                                else {
+                                    document.getElementById("status_message").innerHTML = data.msg;
+                                    console.log(data.job_status);
+                                }
+                            },
+                            error: function () {
+                                $('.wrap-loading').addClass('display-none');
+                                $('.upload_form').removeClass('display-none');
+                                alert("오류가 발생하였습니다.");
+                            },
+                            beforeSend: function () {
+                                //이미지 보여주기 처리
+                                $('.wrap-loading').removeClass('display-none');
+                                $(".reflected").css("opacity", "0.0");
+                                $('.upload_form').addClass('display-none');
+                            },
+                            complete: function () {
+                            }
+                        });
+                    }, 100);
+                }
+            },
+            error: function () {
+                alert("오류가 발생하였습니다!");
+                $('.wrap-loading').removeClass('display-none');
+                $('.upload_form').removeClass('display-none');
+            },
+            beforeSend: function () {
+                //이미지 보여주기 처리
+                $('.wrap-loading').removeClass('display-none');
+                $(".reflected").css("opacity", "0.0");
+                $('.upload_form').addClass('display-none');
+            }
+        }).done(function (data) {
+            console.log(data);
+        });
+    }
+
+</script>
+
+
+</body>
+</html>
