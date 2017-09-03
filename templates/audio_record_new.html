@@ -424,12 +424,15 @@
                                 },
                                 error : function() {
                                     $('.wrap-loading').addClass('display-none');
+                                    clearInterval(timerVal);
                                     alert("err");
+                                    location.reload();
                                 },
                                 beforeSend:function(){
                                     //이미지 보여주기 처리
                                     $('.wrap-loading').removeClass('display-none');
                                     $(".reflected").css("opacity", "0.0");
+
                                 },
                                 complete:function(){
                                 }
@@ -496,7 +499,10 @@
                                     },
                                     error: function () {
                                         $('.wrap-loading').addClass('display-none');
+                                        clearInterval(timerVal);
                                         alert("err");
+                                        location.reload();
+
                                     },
                                     beforeSend: function () {
                                         //이미지 보여주기 처리
