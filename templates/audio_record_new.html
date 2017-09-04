@@ -459,6 +459,7 @@
                 },
                 beforeSend:function(){
                     //이미지 보여주기 처리
+                    document.getElementById("status_message").innerHTML = "파일을 업로드 중 입니다.";
                     $('.wrap-loading').removeClass('display-none');
                     $(".reflected").css("opacity", "0.0");
 		 	    },
@@ -501,6 +502,7 @@
                     },
                     beforeSend: function () {
                         //이미지 보여주기 처리
+                        document.getElementById("status_message").innerHTML = "파일을 업로드 중 입니다.";
                         $('.wrap-loading').removeClass('display-none');
                         $(".reflected").css("opacity", "0.0");
                     },
