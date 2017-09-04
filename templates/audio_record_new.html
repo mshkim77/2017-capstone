@@ -394,6 +394,7 @@
             $.ajax({
                 url: "/job/status/" + job_id, // 호출할 jsp 파일
                 type: "GET",
+                async : false,
                 success: function (data) {
                     if (data.job_status === "DONE") {
                         clearInterval(timerVal);
@@ -428,44 +429,6 @@
             });
         }
 
-{#        function f_userCheck() {#}
-{#                                $.ajax({#}
-{#                                    url: "/job/status/" + job_id, // 호출할 jsp 파일#}
-{#                                    type: "GET",#}
-{#                                    success: function (data) {#}
-{#                                        if (data.job_status === "DONE") {#}
-{#                                            clearInterval(timerVal);#}
-{#                                            document.getElementById("status_message").innerHTML = data.msg;#}
-{#                                            location.href = "/audio/" + job_id;#}
-{#                                        }#}
-{#                                        else if (data.job_status === "ERROR") {#}
-{#                                            clearInterval(timerVal);#}
-{#                                            $('.wrap-loading').addClass('display-none');#}
-{#                                            alert(data.msg);#}
-{#                                        }#}
-{#                                        else {#}
-{#                                            document.getElementById("status_message").innerHTML = data.msg;#}
-{#                                            console.log(data.job_status);#}
-{#                                        }#}
-{#                                    },#}
-{#                                    error: function () {#}
-{#                                        $('.wrap-loading').addClass('display-none');#}
-{#                                        //clearInterval(timerVal);#}
-{#                                        alert("err");#}
-{#                                        //location.reload();#}
-{##}
-{#                                    },#}
-{#                                    beforeSend: function () {#}
-{#                                        //이미지 보여주기 처리#}
-{#                                        $('.wrap-loading').removeClass('display-none');#}
-{#                                        $(".reflected").css("opacity", "0.0");#}
-{#                                    },#}
-{#                                    complete: function () {#}
-{#                                    }#}
-{#                                });#}
-{#                            }#}
-
-
 	    function sendFile() {
             console.log("전송!");
 
@@ -482,7 +445,7 @@
 			    data: fd,
 			    processData: false,
 			    contentType: false,
-{#                async : false,#}
+                async : false,
                 success: function (data) {
                     if(data.saved) {
                         job_id = data.job_id;
@@ -521,7 +484,7 @@
                     data: fd,
                     processData: false,
                     contentType: false,
-{#                  async : false,#}
+                    async : false,
                     success: function (data) {
                         if (data.saved) {
                             job_id = data.job_id;
