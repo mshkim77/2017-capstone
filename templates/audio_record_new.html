@@ -13,7 +13,7 @@
 
 	<link rel="stylesheet" type="text/css" href="{% static "css/HTML_reset_css.css" %}"/>
 	<style type="text/css">
-        @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+        @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 		body {
 			text-align : center;
@@ -438,11 +438,6 @@
 
 			fd.append("audio_file", blob, "upload.webm");
 
-
-            //이미지 보여주기 처리
-            $('.wrap-loading').removeClass('display-none');
-            $(".reflected").css("opacity", "0.0");
-
 			$.ajax({
                 type: "POST",
 			    enctype: "multipart/form-data",
@@ -450,7 +445,7 @@
 			    data: fd,
 			    processData: false,
 			    contentType: false,
-                async : false,
+{#                async : false,#}
                 success: function (data) {
                     if(data.saved) {
                         job_id = data.job_id;
@@ -463,6 +458,9 @@
                     location.reload();
                 },
                 beforeSend:function(){
+                    //이미지 보여주기 처리
+                    $('.wrap-loading').removeClass('display-none');
+                    $(".reflected").css("opacity", "0.0");
 		 	    },
 		 	    complete:function(){
 		 	    }
@@ -482,10 +480,6 @@
                     return;
                 }
 
-                //이미지 보여주기 처리
-                $('.wrap-loading').removeClass('display-none');
-                $(".reflected").css("opacity", "0.0");
-
                 $.ajax({
                     type: "POST",
                     enctype: "multipart/form-data",
@@ -493,7 +487,7 @@
                     data: fd,
                     processData: false,
                     contentType: false,
-                    async : false,
+{#                    async : false,#}
                     success: function (data) {
                         if (data.saved) {
                             job_id = data.job_id;
@@ -506,6 +500,9 @@
                         location.reload();
                     },
                     beforeSend: function () {
+                        //이미지 보여주기 처리
+                        $('.wrap-loading').removeClass('display-none');
+                        $(".reflected").css("opacity", "0.0");
                     },
                     complete: function () {
                     }
