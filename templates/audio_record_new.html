@@ -438,6 +438,11 @@
 
 			fd.append("audio_file", blob, "upload.webm");
 
+
+            //이미지 보여주기 처리
+            $('.wrap-loading').removeClass('display-none');
+            $(".reflected").css("opacity", "0.0");
+
 			$.ajax({
                 type: "POST",
 			    enctype: "multipart/form-data",
@@ -454,11 +459,10 @@
                 },
                 error: function () {
                     console.log("Err");
+                    alert("Err");
+                    location.reload();
                 },
                 beforeSend:function(){
-		 	        //이미지 보여주기 처리
-		 	        $('.wrap-loading').removeClass('display-none');
-		 	        $(".reflected").css("opacity", "0.0");
 		 	    },
 		 	    complete:function(){
 		 	    }
@@ -477,6 +481,11 @@
                 } else {
                     return;
                 }
+
+                //이미지 보여주기 처리
+                $('.wrap-loading').removeClass('display-none');
+                $(".reflected").css("opacity", "0.0");
+
                 $.ajax({
                     type: "POST",
                     enctype: "multipart/form-data",
@@ -493,11 +502,10 @@
                     },
                     error: function () {
                         console.log("Err");
+                        alert("Err");
+                        location.reload();
                     },
                     beforeSend: function () {
-                        //이미지 보여주기 처리
-                        $('.wrap-loading').removeClass('display-none');
-                        $(".reflected").css("opacity", "0.0");
                     },
                     complete: function () {
                     }
