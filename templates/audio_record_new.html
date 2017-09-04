@@ -140,6 +140,13 @@
 	    	top : 3%;
 	    }
 
+        .uploadForm {
+			filter: blur(1px);
+			-webkit-filter: blur(1px);
+			-moz-filter: blur(1px);
+			-o-filter: blur(1px);
+        }
+
 	</style>
 </head>
 <body>
@@ -383,11 +390,87 @@
 	    	}, 100);
 	    }
 
+	    function stateCheck() {
+            $.ajax({
+                url: "/job/status/" + job_id, // 호출할 jsp 파일
+                type: "GET",
+                success: function (data) {
+                    if (data.job_status === "DONE") {
+                        clearInterval(timerVal);
+                        document.getElementById("status_message").innerHTML = data.msg;
+                        location.href = "/audio/" + job_id;
+                    }
+                    else if (data.job_status === "ERROR") {
+                        clearInterval(timerVal);
+                        $('.wrap-loading').addClass('display-none');
+                        alert(data.msg);
+                    }
+                    else {
+                        document.getElementById("status_message").innerHTML = data.msg;
+                        console.log(data.job_status);
+                    }
+                },
+                error: function () {
+                    $('.wrap-loading').addClass('display-none');
+                    //clearInterval(timerVal);
+                    alert("err");
+                    //location.reload();
+                },
+                beforeSend: function () {
+                    //이미지 보여주기 처리
+                    $('.wrap-loading').removeClass('display-none');
+                    $(".reflected").css("opacity", "0.0");
+
+                },
+                complete: function () {
+
+                }
+            });
+        }
+
+{#        function f_userCheck() {#}
+{#                                $.ajax({#}
+{#                                    url: "/job/status/" + job_id, // 호출할 jsp 파일#}
+{#                                    type: "GET",#}
+{#                                    success: function (data) {#}
+{#                                        if (data.job_status === "DONE") {#}
+{#                                            clearInterval(timerVal);#}
+{#                                            document.getElementById("status_message").innerHTML = data.msg;#}
+{#                                            location.href = "/audio/" + job_id;#}
+{#                                        }#}
+{#                                        else if (data.job_status === "ERROR") {#}
+{#                                            clearInterval(timerVal);#}
+{#                                            $('.wrap-loading').addClass('display-none');#}
+{#                                            alert(data.msg);#}
+{#                                        }#}
+{#                                        else {#}
+{#                                            document.getElementById("status_message").innerHTML = data.msg;#}
+{#                                            console.log(data.job_status);#}
+{#                                        }#}
+{#                                    },#}
+{#                                    error: function () {#}
+{#                                        $('.wrap-loading').addClass('display-none');#}
+{#                                        //clearInterval(timerVal);#}
+{#                                        alert("err");#}
+{#                                        //location.reload();#}
+{##}
+{#                                    },#}
+{#                                    beforeSend: function () {#}
+{#                                        //이미지 보여주기 처리#}
+{#                                        $('.wrap-loading').removeClass('display-none');#}
+{#                                        $(".reflected").css("opacity", "0.0");#}
+{#                                    },#}
+{#                                    complete: function () {#}
+{#                                    }#}
+{#                                });#}
+{#                            }#}
+
+
 	    function sendFile() {
             console.log("전송!");
 
 	    	var blob = new Blob(recordedBlobs, {type: 'audio/webm'});
-	    	var url = window.URL.createObjectURL(blob);
+	    	//var url = window.URL.createObjectURL(blob);
 	    	var fd = new FormData();
 
 			fd.append("audio_file", blob, "upload.webm");
@@ -399,46 +482,11 @@
 			    data: fd,
 			    processData: false,
 			    contentType: false,
+{#                async : false,#}
                 success: function (data) {
                     if(data.saved) {
                         job_id = data.job_id;
-                        timerVal = setInterval(function f_userCheck() {
-                            $.ajax({
-                                url : "/job/status/" + job_id, // 호출할 jsp 파일
-                                type : "GET",
-                                success : function(data) {
-                                    if(data.job_status === "DONE") {
-                                        clearInterval(timerVal);
-                                        document.getElementById("status_message").innerHTML = data.msg;
-                                        location.href = "/audio/" + job_id;
-                                    }
-                                    else if(data.job_status === "ERROR") {
-                                        clearInterval(timerVal);
-                                        $('.wrap-loading').addClass('display-none');
-                                        alert(data.msg);
-                                    }
-                                    else {
-                                        document.getElementById("status_message").innerHTML = data.msg;
-                                        console.log(data.job_status);
-                                    }
-                                },
-                                error : function() {
-                                    $('.wrap-loading').addClass('display-none');
-                                    //clearInterval(timerVal);
-                                    alert("err");
-                                    //location.reload();
-                                },
-                                beforeSend:function(){
-                                    //이미지 보여주기 처리
-                                    $('.wrap-loading').removeClass('display-none');
-                                    $(".reflected").css("opacity", "0.0");
-
-                                },
-                                complete:function(){
-                                }
-                            });
-                        }, 100);
-
+                        timerVal = setInterval(stateCheck, 100);
                     }
                 },
                 error: function () {
@@ -456,63 +504,28 @@
 			});
 	    }
 
-	    function fileUpload() {
+        function fileUpload() {
             document.all.file1.click();
             $(".fileForm").change(function () {
-                var data = new FormData();
+                var fd = new FormData();
                 var files = $(".fileForm").get(0).files;
                 if (files.length > 0) {
-                    data.append("audio_file", files[0]);
-                }
-                else {
+                    fd.append("audio_file", files[0]);
+                } else {
                     return;
                 }
                 $.ajax({
                     type: "POST",
                     enctype: "multipart/form-data",
                     url: "/audio/record/",
-                    data: data,
+                    data: fd,
                     processData: false,
                     contentType: false,
+{#                  async : false,#}
                     success: function (data) {
                         if (data.saved) {
                             job_id = data.job_id;
-                            timerVal = setInterval(function f_userCheck() {
-                                $.ajax({
-                                    url: "/job/status/" + job_id, // 호출할 jsp 파일
-                                    type: "GET",
-                                    success: function (data) {
-                                        if (data.job_status === "DONE") {
-                                            clearInterval(timerVal);
-                                            document.getElementById("status_message").innerHTML = data.msg;
-                                            location.href = "/audio/" + job_id;
-                                        }
-                                        else if (data.job_status === "ERROR") {
-                                            clearInterval(timerVal);
-                                            $('.wrap-loading').addClass('display-none');
-                                            alert(data.msg);
-                                        }
-                                        else {
-                                            document.getElementById("status_message").innerHTML = data.msg;
-                                            console.log(data.job_status);
-                                        }
-                                    },
-                                    error: function () {
-                                        $('.wrap-loading').addClass('display-none');
-                                        //clearInterval(timerVal);
-                                        alert("err");
-                                        //location.reload();
-                                    },
-                                    beforeSend: function () {
-                                        //이미지 보여주기 처리
-                                        $('.wrap-loading').removeClass('display-none');
-                                        $(".reflected").css("opacity", "0.0");
-                                    },
-                                    complete: function () {
-                                    }
-                                });
-                            }, 100);
-
+                            timerVal = setInterval(stateCheck, 100);
                         }
                     },
                     error: function () {
@@ -530,6 +543,7 @@
                 });
             });
         }
+
 	   function timeCheck() {
 
 		   if(isTimer) {
