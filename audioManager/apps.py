@@ -136,7 +136,9 @@ def do_extract_feature(audio_id):
         feature = AudioFeature()
 
         if AudioFeature.objects.filter(pk=audio).exists():
-            feature = AudioFeature(pk=AudioFeature)
+            feature = AudioFeature(pk=audio)
+        else:
+            feature.audio = audio
 
         feature.duration = analyze_result[1]
         feature.tempo = analyze_result[2]
